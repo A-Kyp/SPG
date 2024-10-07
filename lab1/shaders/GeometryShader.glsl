@@ -12,6 +12,7 @@ uniform mat4 View;
 uniform mat4 Projection;
 uniform int instances;
 // TODO(student): Declare other uniforms here
+uniform float shrink;
 
 // Output
 layout(location = 0) out vec2 texture_coord;
@@ -36,22 +37,32 @@ void main()
     // TODO(student): Second, modify the points so that the
     // triangle shrinks relative to its center
 
-    for (int i = 0; i <= instances; i++)
-    {
-        // TODO(student): First, modify the offset so that instances
-        // are displayed on `NR_COLS` columns. Test your code by
-        // changing the value of `NR_COLS`. No need to recompile.
-        vec3 offset = vec3(0, 0, 0);
+    vec3 center = vec3((p1.x + p2.x + p3.x)/3, (p1.y + p2.y + p3.y)/3, (p1.z + p2.z + p3.z)/3);
+    p1 = center + (p1-center) * shrink;
+    p2 = center + (p2-center) * shrink;
+    p3 = center + (p3-center) * shrink;
 
-        texture_coord = v_texture_coord[0];
-        EmitPoint(p1, offset);
+    int cols = NR_COLS;
+    while(cols > 0) {
+        for (int i = 0; i <= instances; i++)
+        {
+            // TODO(student): First, modify the offset so that instances
+            // are displayed on `NR_COLS` columns. Test your code by
+            // changing the value of `NR_COLS`. No need to recompile.
+            vec3 offset = vec3(cols*0.5, 0, i+1);
 
-        texture_coord = v_texture_coord[1];
-        EmitPoint(p2, offset);
+            texture_coord = v_texture_coord[0];
+            EmitPoint(p1, offset);
 
-        texture_coord = v_texture_coord[2];
-        EmitPoint(p3, offset);
+            texture_coord = v_texture_coord[1];
+            EmitPoint(p2, offset);
 
-        EndPrimitive();
+            texture_coord = v_texture_coord[2];
+            EmitPoint(p3, offset);
+
+            EndPrimitive();
+        }
+        cols--;
     }
+
 }
