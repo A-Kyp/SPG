@@ -8,7 +8,7 @@ namespace m2
 {
     class Lab3 : public gfxc::SimpleScene
     {
-    public:
+     public:
         Lab3();
         ~Lab3();
 
@@ -54,5 +54,10 @@ namespace m2
         unsigned int framebuffer_object;
         unsigned int color_texture;
         unsigned int depth_texture;
+
+        std::vector<GLenum> draw_textures;
+        int start_X = 0;
+        int start_Y = 0;
+
     };
 }   // namespace m2
