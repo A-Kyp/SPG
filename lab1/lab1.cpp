@@ -27,7 +27,7 @@ void Lab1::Init()
 {
     nrInstances = 0;
     maxInstances = 50;
-    shrink = 0;
+    shrink = 1;
 
     auto camera = GetSceneCamera();
     camera->SetPositionAndRotation(glm::vec3(0, 5, 4), glm::quat(glm::vec3(-30 * TO_RADIANS, 0, 0)));
@@ -72,6 +72,9 @@ void Lab1::Update(float deltaTimeSeconds)
         // TODO(student): Add a shrinking parameter for scaling each
         // triangle in the geometry shader
 
+        loc_instances = shader->GetUniformLocation("shrink");
+        glUniform1f(loc_instances, shrink);
+
         // Note that we only render a single mesh!
         RenderMesh(meshes["bamboo"], shaders["Instances"], glm::vec3(-3.3f, 0.5f, 0), glm::vec3(0.1f));
     }
@@ -95,6 +98,13 @@ void Lab1::OnInputUpdate(float deltaTime, int mods)
     // Treat continuous update based on input with window->KeyHold()
 
     // TODO(student): Add events for modifying the shrinking parameter
+    if (window->KeyHold(GLFW_KEY_1)) {
+        shrink -= deltaTime;
+    }
+
+    if (window->KeyHold(GLFW_KEY_2)) {
+        shrink += deltaTime;
+    }
 
 }
 
